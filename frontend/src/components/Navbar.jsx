@@ -43,7 +43,7 @@ const Navbar = () => {
         </div>
 
         <Link to="/" className="btn btn-ghost text-xl">
-          ChatApp
+          Rizz Chat
         </Link>
       </div>
 

@@ -101,10 +101,7 @@ const Login = () => {
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2.5 rounded-lg transition-colors"
           >
             {isLoggingIn ? (
-              <>
                 <Loader2 className="size-5 animate-spin" />
-                Loading...
-              </>
             ) : (
               "Log in"
             )}
