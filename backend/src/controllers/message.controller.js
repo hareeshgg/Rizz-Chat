@@ -52,7 +52,7 @@ export const getMessages = async (req, res) => {
       where: {
         OR: [
           { userId: myId, followerId: userToChatIntId },
-          { followerId: userToChatIntId, userId: myId }
+          { userId: userToChatIntId, followerId: myId }
         ]
       }
     })
