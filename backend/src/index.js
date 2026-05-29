@@ -2,6 +2,7 @@ import express from 'express';
 import dotenv from 'dotenv';
 import authRoutes from './routes/auth.route.js';
 import messageRoutes from './routes/message.route.js';
+import userRoutes from './routes/follower.route.js'
 import cookieParser from 'cookie-parser';
 import cors from 'cors';
 
@@ -24,6 +25,7 @@ app.use(cors({
 
 app.use("/api/auth", authRoutes)
 app.use("/api/messages", messageRoutes);
+app.use("/api/users", userRoutes)
 
 if (process.env.NODE_ENV === "production") {
   app.use(express.static(path.join(__dirname, "../frontend/dist")));

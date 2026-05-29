@@ -3,18 +3,20 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { Loader } from 'lucide-react'
 import { Toaster } from 'react-hot-toast'
 
-import Navbar from './components/Navbar'
-
-import Home from './pages/Home'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
-import Settings from './pages/Settings'
+
+import Home from './pages/Home'
 import Profile from './pages/Profile'
+import Search from './pages/Search'
+
+import AuthLayout from './layouts/AuthLayout'
+import MainLayout from './layouts/MainLayout'
 
 import { useAuthStore } from './store/useAuthStore'
 import { useEffect } from 'react'
-import AuthLayout from './layouts/AuthLayout'
-import MainLayout from './layouts/MainLayout'
+
+
 
 const App = () => {
     const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
@@ -46,7 +48,7 @@ const App = () => {
                 <Route path='/' element={authUser ? <MainLayout /> : <Navigate to='/auth/login' />}>
                     <Route index element={<Home />} />
                     <Route path='chat' element={<Home />} />
-                    <Route path='settings' element={<Settings />} />
+                    <Route path='search' element={<Search />} />
                     <Route path='profile' element={<Profile />} />
                 </Route>
             </Routes>

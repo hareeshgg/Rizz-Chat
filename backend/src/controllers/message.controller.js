@@ -6,24 +6,36 @@ import { getReceiverSocketId, io } from "../lib/socket.js";
 export const getusersForSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user.id;
-    const filteredUsers = await prisma.user.findMany({
+
+    // Find all accepted friendships for the logged-in user
+    const friendships = await prisma.follower.findMany({
       where: {
-        id: {
-          not: loggedInUserId
-        }
+        OR: [
+          { userId: loggedInUserId, status: "ACCEPTED" },
+          { followerId: loggedInUserId, status: "ACCEPTED" }
+        ]
       },
-      select: {
-        id: true,
-        email: true,
-        username: true,
-        name: true,
-        profilePic: true,
-        createdAt: true,
-        updatedAt: true
+      include: {
+        user: true,
+        follower: true
       }
     });
 
-    return res.status(200).json(filteredUsers);
+    // Map friendships to retrieve the actual friend's User profile
+    const friends = friendships.map(friendship => {
+      const friend = friendship.userId === loggedInUserId ? friendship.follower : friendship.user;
+      return {
+        id: friend.id,
+        email: friend.email,
+        username: friend.username,
+        name: friend.name,
+        profilePic: friend.profilePic,
+        createdAt: friend.createdAt,
+        updatedAt: friend.updatedAt
+      };
+    });
+
+    return res.status(200).json(friends);
   } catch (error) {
     console.log("Error in getusersForSidebar:", error.message);
     res.status(500).json({ message: "Internal server error" });

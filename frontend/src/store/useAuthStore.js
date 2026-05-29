@@ -8,6 +8,11 @@ const BASE_URL =
     ? "http://localhost:3000/api/"
     : "/";
 
+const SOCKET_URL =
+  import.meta.env.MODE === "development"
+    ? "http://localhost:3000"
+    : "/";
+
 export const useAuthStore = create((set, get) => ({
   authUser: null,
   isSigningIn: false,
@@ -22,6 +27,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.get("/auth/check");
 
       set({ authUser: res.data });
+      get().connectSocket();
     } catch (error) {
       console.log("Error checking auth:", error);
       set({ authUser: null });
@@ -36,6 +42,7 @@ export const useAuthStore = create((set, get) => ({
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
       toast.success("Account created successfully!!");
+      get().connectSocket();
     } catch (error) {
       toast.error(error.response?.data?.message || "Error signing up");
       console.log("Error during signup:", error);
@@ -92,15 +99,15 @@ export const useAuthStore = create((set, get) => ({
     const { authUser } = get();
     if (!authUser || get().socket?.connected) return;
 
-    const socket = io(BASE_URL, {
+    const socket = io(SOCKET_URL, {
       query: { userId: authUser.id },
     });
     socket.connect();
 
     set({ socket: socket });
 
-    socket.on("getOnlineUsers", (userId) => {
-      set({ onlineUsers: userId });
+    socket.on("getOnlineUsers", (userIds) => {
+      set({ onlineUsers: userIds.map(Number) });
     })
   },
 

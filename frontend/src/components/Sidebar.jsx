@@ -1,14 +1,13 @@
 import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 
-import { Users } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
     useChatStore();
 
-  const { onlineUsers } = useAuthStore();
+  const { authUser, onlineUsers } = useAuthStore();
 
   useEffect(() => {
     getUsers();
@@ -20,12 +19,12 @@ const Sidebar = () => {
     <aside className="w-full h-full lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200 sm:w-auto">
       <div className="border-b border-base-300 w-full p-5">
         <div className="flex items-center gap-2">
-          <Users className="size-6" />
-          <span className="font-medium lg:block">Contacts</span>
+          <span className="text-2xl font-bold tracking-tight text-base-content flex items-center gap-2">{authUser.name}</span>
         </div>
       </div>
 
       <div className="overflow-y-auto w-full p-3">
+        <input type="text" placeholder="Search" className="input input-bordered input-primary w-full pl-11 pr-12 py-6 rounded-2xl text-base shadow-sm focus:outline-none transition-all duration-200" />
         {users.map((user) => (
           <button
             key={user.id}

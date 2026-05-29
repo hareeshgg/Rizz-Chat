@@ -29,14 +29,14 @@ const ChatContainer = () => {
 
   if (isMessagesLoading) return <div>Loading...</div>;
   return (
-    <div className="flex flex-1 flex-col h-full">
+    <div className="flex flex-1 flex-col h-full border-b border-base-300">
       <ChatHeader />
 
       <div className="flex-1 overflow-auto p-4 space-y-4">
         {messages.map((message) => (
           <div
             key={message.id}
-            className={`chat ${message.senderId === authUser.id ? "chat-end" : "chat-start"
+            className={`chat ${message.userId === authUser.id ? "chat-end" : "chat-start"
               }`
             }
             ref={messageEnd}
@@ -45,7 +45,7 @@ const ChatContainer = () => {
               <div className="size-10 rounded-full border">
                 <img
                   src={
-                    message.senderId === authUser.id
+                    message.userId === authUser.id
                       ? authUser.profilePic || "/profile.jpg"
                       : selectedUser.profilePic || "/profile.jpg"
                   }
