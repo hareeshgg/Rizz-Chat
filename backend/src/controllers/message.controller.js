@@ -1,16 +1,29 @@
-import User from "../models/user.model.js";
-import Message from "../models/message.model.js";
+import { prisma } from "../lib/prisma.js";
 
 import cloudinary from "../lib/cloudinary.js"
 import { getReceiverSocketId, io } from "../lib/socket.js";
 
 export const getusersForSidebar = async (req, res) => {
   try {
-    const loggedInUserId = req.user._id;
-    const filteredUsers = await User.find({
-      _id: { $ne: loggedInUserId },
-    }).select("-password");
-    res.status(200).json(filteredUsers);
+    const loggedInUserId = req.user.id;
+    const filteredUsers = await prisma.user.findMany({
+      where: {
+        id: {
+          not: loggedInUserId
+        }
+      },
+      select: {
+        id: true,
+        email: true,
+        username: true,
+        name: true,
+        profilePic: true,
+        createdAt: true,
+        updatedAt: true
+      }
+    });
+
+    return res.status(200).json(filteredUsers);
   } catch (error) {
     console.log("Error in getusersForSidebar:", error.message);
     res.status(500).json({ message: "Internal server error" });
@@ -20,14 +33,17 @@ export const getusersForSidebar = async (req, res) => {
 export const getMessages = async (req, res) => {
   try {
     const { id: userToChatId } = req.params;
-    const myId = req.user._id;
+    const myId = req.user.id;
 
-    const messages = await Message.find({
-      $or: [
-        { senderId: myId, receiverId: userToChatId },
-        { senderId: userToChatId, receiverId: myId },
-      ],
-    });
+    const userToChatIntId = parseInt(userToChatId, 10);
+    const messages = await prisma.chat.findMany({
+      where: {
+        OR: [
+          { userId: myId, followerId: userToChatIntId },
+          { followerId: userToChatIntId, userId: myId }
+        ]
+      }
+    })
 
     res.status(200).json(messages);
   } catch (error) {
@@ -39,7 +55,7 @@ export const getMessages = async (req, res) => {
 export const sendMessage = async (req, res) => {
   try {
     const { id: receiverId } = req.params;
-    const senderId = req.user._id;
+    const userId = req.user.id;
     const { text, image } = req.body;
 
     let imageUrl;
@@ -49,17 +65,17 @@ export const sendMessage = async (req, res) => {
       imageUrl = uploadResponse.secure_url;
     }
 
-    const newMessage = new Message({
-      senderId,
-      receiverId,
-      text,
-      image: imageUrl,
-    });
-
-    await newMessage.save();
+    const newMessage = await prisma.chat.create({
+      data: {
+        userId,
+        followerId: parseInt(receiverId, 10),
+        text,
+        image: imageUrl,
+      }
+    })
 
     const receiverSocketId = getReceiverSocketId(receiverId);
-    if(receiverSocketId) {
+    if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newMessage);
     }
 

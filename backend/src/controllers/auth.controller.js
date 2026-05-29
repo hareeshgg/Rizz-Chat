@@ -18,14 +18,23 @@ export const signup = async (req, res) => {
       return res.status(400).send("Password must be at least 6 characters");
     }
 
-    const user = await prisma.user.findUnique({ email })
+    const userMail = await prisma.user.findUnique({ where: { email: email } })
+    const userName = await prisma.user.findUnique({ where: { username: username } })
 
-    if (user) { return res.status(400).send("User already exists") }
+    if (userMail) { return res.status(400).send("Email already used") }
+    if (userName) { return res.status(400).send("Username already taken") }
 
     const salt = await bcrypt.genSalt(10)
     const hashedPassword = await bcrypt.hash(password, salt)
 
-    const newUser = await prisma.user.create({ email: email, username: username, name: name, password: hashedPassword })
+    const newUser = await prisma.user.create({
+      data: {
+        email: email,
+        username: username,
+        name: name,
+        password: hashedPassword,
+      }
+    })
 
     if (newUser) {
       generateToken(newUser.id, res);
@@ -50,7 +59,7 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await prisma.user.findUnique({ email })
+    const user = await prisma.user.findUnique({ where: { email } })
     if (!user) return res.status(400).json({ message: "Invalid credential" });
 
     const idPasswordCorrect = await bcrypt.compare(password, user.password);
@@ -95,7 +104,7 @@ export const updateProfile = async (req, res) => {
 
     const updatedUser = await prisma.user.update({
       where: {
-        userId
+        id: userId
       },
       data: {
         profilePic: uploadResponse.secure_url

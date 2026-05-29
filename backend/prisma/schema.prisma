@@ -12,7 +12,7 @@ datasource db {
   provider = "postgresql"
 }
 
-enum friendStatus {
+enum FollowerStatus {
   PENDING
   ACCEPTED
   BLOCKED
@@ -36,17 +36,17 @@ model User {
 }
 
 model Follower {
-  id        Int          @id @default(autoincrement())
-  status    friendStatus
-  createdAt DateTime     @default(now())
+  id        Int            @id @default(autoincrement())
+  status    FollowerStatus
+  createdAt DateTime       @default(now())
 
   userId Int
   user   User @relation("UserSent", fields: [userId], references: [id], onDelete: Cascade)
 
-  friendId Int
-  friend   User @relation("UserReceived", fields: [friendId], references: [id], onDelete: Cascade)
+  followerId Int
+  follower   User @relation("UserReceived", fields: [followerId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, friendId])
+  @@unique([userId, followerId])
 }
 
 model Chat {
@@ -58,6 +58,6 @@ model Chat {
   userId Int
   user   User @relation("sentMessages", fields: [userId], references: [id], onDelete: Cascade)
 
-  friendId Int
-  friend   User @relation("receivedMessages", fields: [friendId], references: [id], onDelete: Cascade)
+  followerId Int
+  follower   User @relation("receivedMessages", fields: [followerId], references: [id], onDelete: Cascade)
 }
