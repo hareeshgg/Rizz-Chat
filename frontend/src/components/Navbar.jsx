@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Settings, User, LogIn, LogOut, Menu } from "lucide-react";
+import { Settings, User, Menu, Heart, LogIn } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const Navbar = () => {
@@ -23,8 +23,18 @@ const Navbar = () => {
             ) : (
               <>
                 <li>
-                  <Link to="/settings" className="flex items-center gap-2">
-                    <Settings className="w-4 h-4" /> Settings
+                  <Link to="/home" className="flex items-center gap-2">
+                    <Settings className="w-4 h-4" /> Messages
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/search" className="flex items-center gap-2">
+                    <User className="w-4 h-4" /> Search
+                  </Link>
+                </li>
+                <li>
+                  <Link to="/profile" className="flex items-center gap-2">
+                    <Heart className="w-4 h-4" /> Notifications
                   </Link>
                 </li>
                 <li>
@@ -32,11 +42,7 @@ const Navbar = () => {
                     <User className="w-4 h-4" /> Profile
                   </Link>
                 </li>
-                <li>
-                  <button onClick={logout} className="flex items-center gap-2 w-full">
-                    <LogOut className="w-4 h-4" /> Logout
-                  </button>
-                </li>
+
               </>
             )}
           </ul>
@@ -49,7 +55,7 @@ const Navbar = () => {
 
       {/* Desktop navigation */}
       <div className="navbar-end hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
+        <ul className="menu menu-vertical px-1">
           {!authUser ? (
             <li>
               <Link to="/login" className="flex items-center gap-2">
@@ -58,26 +64,30 @@ const Navbar = () => {
               </Link>
             </li>
           ) : (
-            <>
+            <div className="flex flex-row">
+
               <li>
-                <Link to="/settings" className="flex items-center gap-2">
-                  <Settings className="w-5 h-5" />
-                  <span className="hidden xl:inline">Settings</span>
+                <Link to="/home" className="flex items-center gap-2">
+                  <Settings className="w-4 h-4" /> Messages
+                </Link>
+              </li>
+              <li>
+                <Link to="/search" className="flex items-center gap-2">
+                  <User className="w-4 h-4" /> Search
                 </Link>
               </li>
               <li>
                 <Link to="/profile" className="flex items-center gap-2">
-                  <User className="w-5 h-5" />
-                  <span className="hidden xl:inline">Profile</span>
+                  <Heart className="w-4 h-4" /> Notifications
                 </Link>
               </li>
               <li>
-                <button onClick={logout} className="flex items-center gap-2">
-                  <LogOut className="w-5 h-5" />
-                  <span className="hidden xl:inline">Logout</span>
-                </button>
+                <Link to="/profile" className="flex items-center gap-2">
+                  <User className="w-4 h-4" /> Profile
+                </Link>
               </li>
-            </>
+
+            </div>
           )}
         </ul>
       </div>

@@ -101,7 +101,7 @@ const Login = () => {
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2.5 rounded-lg transition-colors"
           >
             {isLoggingIn ? (
-                <Loader2 className="size-5 animate-spin" />
+              <Loader2 className="size-5 animate-spin" />
             ) : (
               "Log in"
             )}
@@ -111,7 +111,7 @@ const Login = () => {
         <div className="mt-6 text-center text-sm text-gray-600">
           Dont have an account?{" "}
           <Link
-            to="/signup"
+            to="/auth/signup"
             className="text-indigo-600 hover:text-indigo-500 font-medium"
           >
             Sign Up

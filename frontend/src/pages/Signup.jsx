@@ -184,7 +184,7 @@ const Signup = () => {
         <div className="mt-6 text-center text-sm text-gray-600">
           Already have an account?{" "}
           <Link
-            to="/login"
+            to="/auth/login"
             className="text-indigo-600 hover:text-indigo-500 font-medium"
           >
             Sign in
