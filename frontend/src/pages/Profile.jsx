@@ -42,12 +42,11 @@ const Profile = () => {
                 src={selectedImage || authUser?.profilePic || "/profile.jpg"}
                 alt="Profile"
               />
-              
+
               <label
                 htmlFor="avatar-upload"
                 className={`
-                  absolute bottom-7 bg-base-content hover:scale-105 p-2 rounded-full cursor-pointer transition-all duration-200 ${
-                    isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
+                  absolute bottom-7 bg-base-content hover:scale-105 p-2 rounded-full cursor-pointer transition-all duration-200 ${isUpdatingProfile ? "animate-pulse pointer-events-none" : ""
                   }
                 `}
               >
@@ -83,10 +82,25 @@ const Profile = () => {
                 </label>
                 <input
                   disabled
+                  id="name"
+                  className="border rounded px-4 py-2 w-full"
+                  type="text"
+                  value={authUser?.name || "Jane Name"}
+                />
+              </div>
+              <div className="pb-6">
+                <label
+                  htmlFor="name"
+                  className="font-semibold text-gray-600 block pb-1"
+                >
+                  <User className="h-5 w-5 text-gray-400 inline" /> Name
+                </label>
+                <input
+                  disabled
                   id="username"
                   className="border rounded px-4 py-2 w-full"
                   type="text"
-                  value={authUser?.fullName || "Jane Name"}
+                  value={authUser?.username || "Jane Name"}
                 />
               </div>
               <div className="pb-4">

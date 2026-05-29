@@ -28,13 +28,12 @@ const Sidebar = () => {
       <div className="overflow-y-auto w-full p-3">
         {users.map((user) => (
           <button
-            key={user._id}
+            key={user.id}
             onClick={() => setSelectedUser(user)}
-            className={`w-full p-3 flex items-center justify-start gap-3 hover:bg-base-300  transition-colors ${
-              selectedUser?._id === user._id
-                ? "bg-base-300 ring-1 ring-base-300"
-                : ""
-            }`}
+            className={`w-full p-3 flex items-center justify-start gap-3 hover:bg-base-300  transition-colors ${selectedUser?.id === user.id
+              ? "bg-base-300 ring-1 ring-base-300"
+              : ""
+              }`}
           >
             <div className="relative flex-shrink-0">
               <img
@@ -42,15 +41,15 @@ const Sidebar = () => {
                 alt={user.name}
                 className="size-12 object-cover rounded-full"
               />
-              {onlineUsers.includes(user._id) && (
+              {onlineUsers.includes(user.id) && (
                 <span className="absolute bottom-0 right-0 size-3 bg-green-500 rounded-full ring-2 ring-zinc-900" />
               )}
             </div>
 
             <div className="flex-1 text-left min-w-0">
-              <div className="font-medium truncate">{user.fullName}</div>
+              <div className="font-medium truncate">{user.name}</div>
               <div className="text-sm text-zinc-400">
-                {onlineUsers.includes(user._id) ? "Online" : "Offline"}
+                {onlineUsers.includes(user.id) ? "Online" : "Offline"}
               </div>
             </div>
           </button>

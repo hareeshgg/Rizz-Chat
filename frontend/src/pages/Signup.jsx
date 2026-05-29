@@ -7,7 +7,8 @@ import { toast } from "react-hot-toast";
 const Signup = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [formData, setFormData] = useState({
-    fullName: "",
+    name: "",
+    username: "",
     email: "",
     password: "",
   });
@@ -16,10 +17,8 @@ const Signup = () => {
 
   const validateForm = () => {
     console.log("validating form data:", formData);
-    const newErrors = {};
 
-    if (!formData.fullName.trim()) return toast.error("Full name is required");
-
+    if (!formData.name.trim()) return toast.error("Full name is required");
 
     if (!formData.email.trim()) {
       return toast.error("Email is required");
@@ -42,7 +41,7 @@ const Signup = () => {
 
     const success = validateForm();
 
-    if(success === true) signup(formData)
+    if (success === true) signup(formData)
 
   };
 
@@ -81,15 +80,35 @@ const Signup = () => {
               </div>
               <input
                 type="text"
-                name="fullName"
+                name="name"
                 className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
                 placeholder="Enter your full name"
-                value={formData.fullName}
+                value={formData.name}
                 onChange={handleChange}
                 required
               />
             </div>
-            
+          </div>
+
+          {/* Username Field */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Username
+            </label>
+            <div className="relative">
+              <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                <User className="h-5 w-5 text-gray-400" />
+              </div>
+              <input
+                type="text"
+                name="username"
+                className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 outline-none transition-all"
+                placeholder="Enter a username"
+                value={formData.username}
+                onChange={handleChange}
+                required
+              />
+            </div>
           </div>
 
           {/* Email Field */}
@@ -111,7 +130,7 @@ const Signup = () => {
                 required
               />
             </div>
-            
+
           </div>
 
           {/* Password Field */}
@@ -144,14 +163,14 @@ const Signup = () => {
                 )}
               </button>
             </div>
-            
+
           </div>
 
           <button
             type="submit"
             disabled={isSigningUp}
             className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2.5 rounded-lg transition-colors"
-            
+
           >
             {isSigningUp ? (
               <>
