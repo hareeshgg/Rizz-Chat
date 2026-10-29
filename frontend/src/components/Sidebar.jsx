@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 
 import { useAuthStore } from "../store/useAuthStore";
+import { Loader2 } from "lucide-react";
 
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
@@ -13,13 +14,13 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers]);
 
-  if (isUsersLoading) return <div>Loading...</div>;
+  if (isUsersLoading) return <div className="flex items-center justify-center h-full w-full lg:w-72"><Loader2 className="animate-spin"/></div>;
 
   return (
     <aside className="w-full h-full lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200 sm:w-auto">
       <div className="border-b border-base-300 w-full p-5">
         <div className="flex items-center gap-2">
-          <span className="text-2xl font-bold tracking-tight text-base-content flex items-center gap-2">{authUser.name}</span>
+          <span className="text-lg font-bold tracking-tight text-base-content flex items-center gap-2">{authUser.username}</span>
         </div>
       </div>
 
@@ -34,7 +35,7 @@ const Sidebar = () => {
               : ""
               }`}
           >
-            <div className="relative flex-shrink-0">
+            <div className="relative shrink-0">
               <img
                 src={user.profilePic || "/profile.jpg"}
                 alt={user.name}
