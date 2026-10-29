@@ -1,10 +1,15 @@
 import { Link, useLocation } from "react-router-dom";
-import { House, Search, Heart, LogIn } from "lucide-react";
+import { House, Search, Heart, LogIn, LogOut } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const Navbar = () => {
   const { authUser } = useAuthStore();
   const pathName = useLocation().pathname;
+  const {logout} = useAuthStore();
+ 
+  const handleLogout = () => {
+    logout();
+  }
 
   return (
     <>
@@ -47,38 +52,40 @@ const Navbar = () => {
         </li>
       ) : (
         <div className="fixed left-0 top-0 h-screen w-20 bg-base-100 border-r border-base-300 hidden md:flex flex-col items-center justify-between py-8 px-2 z-50">
-          {/* Logo at the Top */}
           <Link to="/" className="flex items-center justify-center p-3 hover:bg-base-200 rounded-xl transition-all group">
-            {/* Instagram-style camera logo */}
-            <svg className="size-7 group-hover:scale-110 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
+            <svg className="size-6 group-hover:scale-110 transition-transform" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line></svg>
           </Link>
 
-          {/* Navigation Items in Middle */}
+          {/* Navigation Items */}
           <div className="flex flex-col gap-4 w-full items-center">
-            <Link to="/" className={`p-3 rounded-xl transition-all group ${pathName === "/" ? "text-base-content/80" : " text-primary bg-primary/10 hover:bg-base-200 hover:text-base-content"}`}>
+            <Link to="/" className={`p-3 rounded-xl transition-all group ${pathName === "/" ? "text-base-content/80 bg-primary/10" : " text-primary hover:bg-base-200 hover:text-base-content"}`}>
               <House />
             </Link>
 
-            <Link to="/search" className={`p-3 rounded-xl transition-all group ${pathName === "/search" ? "text-base-content/80" : " text-primary bg-primary/10 hover:bg-base-200 hover:text-base-content"}`}>
+            <Link to="/search" className={`p-3 rounded-xl transition-all group ${pathName === "/search" ? "text-base-content/80 bg-primary/10" : " text-primary hover:bg-base-200 hover:text-base-content"}`}>
               <Search />
             </Link>
 
-            <Link to="/notifications" className={`p-3 rounded-xl transition-all group ${pathName === "/profile" ? "text-base-content/80" : " text-primary bg-primary/10 hover:bg-base-200 hover:text-base-content"}`}>
+            <Link to="/notifications" className={`p-3 rounded-xl transition-all group ${pathName === "/notifications" ? "text-base-content/80 bg-primary/10" : " text-primary hover:bg-base-200 hover:text-base-content"}`}>
               <Heart />
+            </Link>
+
+            {/* User Profile Avatar */}
+            <Link to="/profile" className="avatar placeholder hover:scale-105 transition-transform group">
+              <div className="w-10 rounded-full bg-neutral text-neutral-content flex items-center justify-center font-bold text-sm">
+                {authUser?.profilePic ? <img
+                  id="showImage"
+                  className="size-8 object-cover rounded-full"
+                  src={authUser?.profilePic}
+                  alt="Profile"
+                /> : authUser.name.charAt(0).toUpperCase()}
+              </div>
             </Link>
           </div>
 
-          {/* User Profile Avatar at Bottom */}
-          <Link to="/profile" className="avatar placeholder hover:scale-105 transition-transform group">
-            <div className="w-10 rounded-full bg-neutral text-neutral-content flex items-center justify-center font-bold text-sm">
-              {authUser?.profilePic ? <img
-                id="showImage"
-                className="size-8 object-cover rounded-full"
-                src={authUser?.profilePic}
-                alt="Profile"
-              /> : authUser.name.charAt(0).toUpperCase()}
-            </div>
-          </Link>
+          <button onClick={handleLogout} className="text-red-400 hover:cursor-pointer">
+            <LogOut className="size-5"/>
+          </button>
         </div>
       )}
     </>
