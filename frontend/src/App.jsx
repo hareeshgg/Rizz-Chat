@@ -37,22 +37,24 @@ const App = () => {
     }
 
     return (
-        <div>
-            <Toaster position="top-center" reverseOrder={false} />
-            <Routes>
-                <Route path='/auth' element={<AuthLayout />}>
-                    <Route path='login' element={!authUser ? <Login /> : <Navigate to='/' />} />
-                    <Route path='signup' element={!authUser ? <Signup /> : <Navigate to='/' />} />
-                </Route>
-                <Route path='/' element={authUser ? <MainLayout /> : <Navigate to='/auth/login' />}>
-                    <Route index element={<Home />} />
-                    <Route path='chat' element={<Home />} />
-                    <Route path='search' element={<Search />} />
-                    <Route path='profile' element={<Profile />} />
-                    <Route path='notifications' element={<Notifications />} />
-                </Route>
-            </Routes>
-        </div>
+        <>
+            <Toaster position="top-right" reverseOrder={false} />
+            <div>
+                <Routes>
+                    <Route path='/auth' element={<AuthLayout />}>
+                        <Route path='login' element={!authUser ? <Login /> : <Navigate to='/' />} />
+                        <Route path='signup' element={!authUser ? <Signup /> : <Navigate to='/' />} />
+                    </Route>
+                    <Route path='/' element={authUser ? <MainLayout /> : <Navigate to='/auth/login' />}>
+                        <Route index element={<Home />} />
+                        <Route path='chat' element={<Home />} />
+                        <Route path='search' element={<Search />} />
+                        <Route path='profile' element={<Profile />} />
+                        <Route path='notifications' element={<Notifications />} />
+                    </Route>
+                </Routes>
+            </div>
+        </>
     )
 }
 

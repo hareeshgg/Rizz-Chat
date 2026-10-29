@@ -37,7 +37,7 @@ const Navbar = () => {
               className="size-8 object-cover rounded-full"
               src={authUser?.profilePic}
               alt="Profile"
-            /> : authUser.name.charAt(0).toUpperCase()}
+            /> : authUser?.name?.toString().charAt(0).toUpperCase()}
           </div>
         </Link>
       </div>

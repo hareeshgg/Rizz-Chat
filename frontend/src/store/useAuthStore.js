@@ -15,7 +15,7 @@ const SOCKET_URL =
 
 export const useAuthStore = create((set, get) => ({
   authUser: null,
-  isSigningIn: false,
+  isSigningUp: false,
   isLoggingIn: false,
   isUpdatingProfile: false,
   isCheckingAuth: true,
@@ -37,17 +37,18 @@ export const useAuthStore = create((set, get) => ({
   },
 
   signup: async (data) => {
-    set({ isSigningIn: true });
+    set({ isSigningUp: true });
     try {
       const res = await axiosInstance.post("/auth/signup", data);
       set({ authUser: res.data });
       toast.success("Account created successfully!!");
+      
       get().connectSocket();
     } catch (error) {
       toast.error(error.response?.data?.message || "Error signing up");
       console.log("Error during signup:", error);
     } finally {
-      set({ isSigningIn: false });
+      set({ isSigningUp: false });
     }
   },
 
