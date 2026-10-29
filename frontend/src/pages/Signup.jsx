@@ -13,7 +13,7 @@ const Signup = () => {
     password: "",
   });
 
-  const { signup, isSigningUp, error } = useAuthStore();
+  const { signup, isSigningUp } = useAuthStore();
 
   const validateForm = () => {
     console.log("validating form data:", formData);
@@ -37,7 +37,7 @@ const Signup = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Data:", formData);
+    // console.log("Form Data:", formData);
 
     const success = validateForm();
 
@@ -169,13 +169,11 @@ const Signup = () => {
           <button
             type="submit"
             disabled={isSigningUp}
-            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2.5 rounded-lg transition-colors"
-
+            className="w-full bg-indigo-600 hover:bg-indigo-700 disabled:bg-indigo-400 text-white font-medium py-2.5 rounded-lg transition-colors flex items-center justify-center"
           >
             {isSigningUp ? (
               <>
                 <Loader2 className="size-5 animate-spin" />
-                Loading...
               </>
             ) : "Create Account"}
           </button>
