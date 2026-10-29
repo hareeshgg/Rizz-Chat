@@ -15,8 +15,7 @@ import MainLayout from './layouts/MainLayout'
 
 import { useAuthStore } from './store/useAuthStore'
 import { useEffect } from 'react'
-
-
+import Notifications from './pages/Notifications'
 
 const App = () => {
     const { authUser, checkAuth, isCheckingAuth, onlineUsers } = useAuthStore();
@@ -50,6 +49,7 @@ const App = () => {
                     <Route path='chat' element={<Home />} />
                     <Route path='search' element={<Search />} />
                     <Route path='profile' element={<Profile />} />
+                    <Route path='notifications' element={<Notifications />} />
                 </Route>
             </Routes>
         </div>
