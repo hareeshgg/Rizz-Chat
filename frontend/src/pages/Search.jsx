@@ -104,7 +104,7 @@ const Search = () => {
                     {!username.trim() && (
                         <div className="flex-1 flex flex-col items-center justify-center py-16 text-center text-zinc-400">
                             <div className="size-24 rounded-full bg-base-200 flex items-center justify-center mb-6 shadow-inner animate-bounce duration-1000">
-                                <SearchIcon className="size-10 text-primary opacity-60" />
+                                <SearchIcon className="size-10 text-white opacity-60" />
                             </div>
                             <h3 className="text-xl font-semibold text-base-content mb-2">Discover People</h3>
                             <p className="text-sm max-w-sm">
