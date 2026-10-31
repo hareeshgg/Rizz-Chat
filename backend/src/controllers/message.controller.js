@@ -6,39 +6,125 @@ import { getReceiverSocketId, io } from "../lib/socket.js";
 export const getusersForSidebar = async (req, res) => {
   try {
     const loggedInUserId = req.user.id;
+    const search = req.query.search?.trim() || "";
 
-    // Find all accepted friendships for the logged-in user
+    // Only fetch people who follow the logged-in user
     const friendships = await prisma.follower.findMany({
       where: {
-        OR: [
-          { userId: loggedInUserId, status: "ACCEPTED" },
-          { followerId: loggedInUserId, status: "ACCEPTED" }
-        ]
+        userId: loggedInUserId,
+        status: "ACCEPTED",
+
+        // Search ONLY within accepted followers
+        ...(search && {
+          follower: {
+            is: {
+              OR: [
+                {
+                  username: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+                {
+                  name: {
+                    contains: search,
+                    mode: "insensitive",
+                  },
+                },
+              ],
+            },
+          },
+        }),
       },
       include: {
-        user: true,
-        follower: true
+        follower: {
+          select: {
+            id: true,
+            username: true,
+            name: true,
+            profilePic: true,
+            createdAt: true,
+          },
+        },
+      },
+    });
+
+    // Extract followers
+    const followers = friendships.map((friendship) => ({
+      ...friendship.follower,
+      lastMessageAt: null,
+    }));
+
+    if (followers.length === 0) {
+      return res.status(200).json([]);
+    }
+
+    // Get follower IDs
+    const followerIds = followers.map((user) => user.id);
+
+    // Fetch conversations between logged-in user and followers
+    const chats = await prisma.chat.findMany({
+      where: {
+        OR: [
+          {
+            userId: loggedInUserId,
+            followerId: { in: followerIds },
+          },
+          {
+            userId: { in: followerIds },
+            followerId: loggedInUserId,
+          },
+        ],
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      select: {
+        userId: true,
+        followerId: true,
+        createdAt: true,
+      },
+    });
+
+    // Get latest message for each follower
+    const latestChatMap = new Map();
+
+    for (const chat of chats) {
+      const friendId =
+        chat.userId === loggedInUserId
+          ? chat.followerId
+          : chat.userId;
+
+      if (!latestChatMap.has(friendId)) {
+        latestChatMap.set(friendId, chat.createdAt);
       }
-    });
+    }
 
-    // Map friendships to retrieve the actual friend's User profile
-    const friends = friendships.map(friendship => {
-      const friend = friendship.userId === loggedInUserId ? friendship.follower : friendship.user;
-      return {
-        id: friend.id,
-        email: friend.email,
-        username: friend.username,
-        name: friend.name,
-        profilePic: friend.profilePic,
-        createdAt: friend.createdAt,
-        updatedAt: friend.updatedAt
-      };
-    });
+    // Sort followers by conversation activity
+    const sortedFollowers = followers
+      .map((follower) => ({
+        ...follower,
+        lastMessageAt: latestChatMap.get(follower.id) || null,
+      }))
+      .sort((a, b) => {
+        if (a.lastMessageAt && b.lastMessageAt) {
+          return new Date(b.lastMessageAt) - new Date(a.lastMessageAt);
+        }
 
-    return res.status(200).json(friends);
+        if (a.lastMessageAt) return -1;
+        if (b.lastMessageAt) return 1;
+
+        return new Date(b.createdAt) - new Date(a.createdAt);
+      });
+
+    return res.status(200).json(sortedFollowers);
+
   } catch (error) {
-    console.log("Error in getusersForSidebar:", error.message);
-    res.status(500).json({ message: "Internal server error" });
+    console.error("Error in getusersForSidebar:", error);
+
+    return res.status(500).json({
+      message: "Internal server error",
+    });
   }
 };
 

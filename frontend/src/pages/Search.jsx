@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useFollowerStore } from "../store/useFollowerStore";
 import { useChatStore } from "../store/useChatStore";
-import { Search as SearchIcon, UserCheck, UserPlus, MessageSquare, X, Users, MessageCircle } from "lucide-react";
+import { Search as SearchIcon, UserCheck, UserPlus, X, Users, MessageCircle } from "lucide-react";
 
 const Search = () => {
     const { users, getUsers, isUsersLoading, toggleFollow } = useFollowerStore();
@@ -40,10 +40,8 @@ const Search = () => {
                 {/* Header Section */}
                 <div className="mb-6 flex flex-col gap-1">
                     <h1 className="text-2xl font-bold tracking-tight text-base-content flex items-center gap-2">
-
                         Search
                     </h1>
-
                 </div>
 
                 {/* Search Input Card */}
@@ -103,12 +101,12 @@ const Search = () => {
                     {/* Empty State when no query entered */}
                     {!username.trim() && (
                         <div className="flex-1 flex flex-col items-center justify-center py-16 text-center text-zinc-400">
-                            <div className="size-24 rounded-full bg-base-200 flex items-center justify-center mb-6 shadow-inner animate-bounce duration-1000">
+                            <div className="size-24 rounded-full bg-base-200 flex items-center justify-center mb-6 shadow-inner duration-1000">
                                 <SearchIcon className="size-10 text-white opacity-60" />
                             </div>
                             <h3 className="text-xl font-semibold text-base-content mb-2">Discover People</h3>
                             <p className="text-sm max-w-sm">
-                                Enter a name or username in the box above to look up other accounts and start chatting.
+                                Enter a username in the box above to look up other accounts and start chatting.
                             </p>
                         </div>
                     )}

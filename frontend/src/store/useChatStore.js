@@ -9,14 +9,23 @@ export const useChatStore = create((set, get) => ({
   selectedUser: null,
   isUsersLoading: false,
   isMessagesLoading: false,
+  hasLoadedUsers: false,
 
-  getUsers: async () => {
+  getUsers: async (query = "") => {
     set({ isUsersLoading: true });
     try {
-      const res = await axiosInstance.get("/messages/users");
+      const res = await axiosInstance.get("/messages/users", {
+        params: {
+          search: query.trim(),
+        },
+      });
       set({ users: res.data });
     } catch (error) {
-      toast.error(error.response.data.message);
+      console.error("Error fetching users:", error);
+      set({ users: [] });
+      toast.error(
+        error.response?.data?.message || "Failed to fetch users"
+      );
     } finally {
       set({ isUsersLoading: false });
     }
