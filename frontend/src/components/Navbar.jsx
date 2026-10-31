@@ -3,35 +3,31 @@ import { House, Search, Heart, LogIn, LogOut } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 
 const Navbar = () => {
-  const { authUser } = useAuthStore();
+  const { authUser, logout } = useAuthStore();
   const pathName = useLocation().pathname;
-  const {logout} = useAuthStore();
- 
+
   const handleLogout = () => {
     logout();
   }
 
   return (
     <>
-      {/* Mobile dropdown */}
+      {/* Mobile navigation */}
       <div className="dock bg-neutral text-neutral-content md:hidden">
-        <Link to="/" className={pathName === "/" ? "dock-active" : undefined}>
+        <Link to="/" className={`p-3 rounded-xl transition-all group ${pathName === "/" ? "text-base-content bg-primary/10" : "text-base-content/80"}`}>
           <House />
-          <span className="dock-label">Home</span>
         </Link>
 
-        <Link to="/search" className={pathName === "/search" ? "dock-active" : undefined}>
+        <Link to="/search" className={`p-3 rounded-xl transition-all group ${pathName === "/search" ? "text-base-content bg-primary/10" : "text-base-content/80"}`}>
           <Search />
-          <span className="dock-label">Search</span>
         </Link>
 
-        <Link to="/notifications" className={pathName === "/notifications" ? "dock-active" : undefined}>
+        <Link to="/notifications" className={`p-3 rounded-xl transition-all group ${pathName === "/notifications" ? "text-base-content bg-primary/10" : "text-base-content/80"}`}>
           <Heart />
-          <span className="dock-label">Notifications</span>
         </Link>
 
         <Link to="/profile" className="avatar placeholder hover:scale-105 transition-transform group">
-          <div className="w-10 rounded-full bg-neutral text-neutral-content flex items-center justify-center font-bold text-sm">
+          <div className="w-10 rounded-full text-neutral-content flex items-center justify-center font-bold text-sm">
             {authUser?.profilePic ? <img
               id="showImage"
               className="size-8 object-cover rounded-full"
@@ -72,7 +68,7 @@ const Navbar = () => {
 
             {/* User Profile Avatar */}
             <Link to="/profile" className="avatar placeholder hover:scale-105 transition-transform group">
-              <div className="w-10 rounded-full bg-neutral text-neutral-content flex items-center justify-center font-bold text-sm">
+              <div className="w-10 text-neutral-content flex items-center justify-center font-bold text-sm">
                 {authUser?.profilePic ? <img
                   id="showImage"
                   className="size-8 object-cover rounded-full"
@@ -84,7 +80,7 @@ const Navbar = () => {
           </div>
 
           <button onClick={handleLogout} className="text-red-400 hover:cursor-pointer">
-            <LogOut className="size-5"/>
+            <LogOut className="size-5" />
           </button>
         </div>
       )}
