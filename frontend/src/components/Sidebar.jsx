@@ -2,7 +2,8 @@ import { useEffect } from "react";
 import { useChatStore } from "../store/useChatStore";
 
 import { useAuthStore } from "../store/useAuthStore";
-import { Loader2 } from "lucide-react";
+import { Ellipsis } from "lucide-react";
+import ChatSidebarSkeleton from "./skeletons/ChatSidebarSkeleton";
 
 const Sidebar = () => {
   const { getUsers, users, selectedUser, setSelectedUser, isUsersLoading } =
@@ -14,23 +15,26 @@ const Sidebar = () => {
     getUsers();
   }, [getUsers]);
 
-  if (isUsersLoading) return <div className="flex items-center justify-center h-full w-full lg:w-72"><Loader2 className="animate-spin"/></div>;
+  if (isUsersLoading) return <ChatSidebarSkeleton />;
 
   return (
     <aside className="w-full h-full lg:w-72 border-r border-base-300 flex flex-col transition-all duration-200 sm:w-auto">
       <div className="border-b border-base-300 w-full p-5">
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-between gap-2">
           <span className="text-lg font-bold tracking-tight text-base-content flex items-center gap-2">{authUser.username}</span>
+          <button className="cursor-pointer" onClick={() => alert("Baka")}>
+            <Ellipsis className="size-5" />
+          </button>
         </div>
       </div>
 
       <div className="overflow-y-auto w-full p-3">
-        <input type="text" placeholder="Search" className="input input-bordered input-primary w-full pl-11 pr-12 py-6 rounded-2xl text-base shadow-sm focus:outline-none transition-all duration-200" />
+        <input type="text" placeholder="Search chats..." className="input input-bordered input-primary w-full px-6 py-6 mb-2 rounded-2xl text-base shadow-sm focus:outline-none transition-all duration-200" />
         {users.map((user) => (
           <button
             key={user.id}
             onClick={() => setSelectedUser(user)}
-            className={`w-full p-3 flex items-center justify-start gap-3 hover:bg-base-300  transition-colors ${selectedUser?.id === user.id
+            className={`w-full p-3 rounded-lg flex items-center justify-start gap-3 hover:bg-base-300  transition-colors ${selectedUser?.id === user.id
               ? "bg-base-300 ring-1 ring-base-300"
               : ""
               }`}

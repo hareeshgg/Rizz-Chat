@@ -6,6 +6,7 @@ import ChatHeader from "./ChatHeader";
 import MessageInput from "./MessageInput";
 import { useAuthStore } from "../store/useAuthStore";
 import { useRef } from "react";
+import ChatContainerSkeleton from "./skeletons/ChatContainerSkeleton";
 
 const ChatContainer = () => {
   const { messages, getMessages, isMessagesLoading, selectedUser, subscribeToMessages, unsubscribeFromMessages } =
@@ -27,7 +28,7 @@ const ChatContainer = () => {
       messageEnd.current.scrollIntoView({ behavior: "smooth" });
   }, [messages])
 
-  if (isMessagesLoading) return <div>Loading...</div>;
+  if (isMessagesLoading) return <ChatContainerSkeleton />;
   return (
     <div className="flex flex-1 flex-col h-full border-b border-base-300">
       <ChatHeader />
@@ -62,7 +63,7 @@ const ChatContainer = () => {
                 <img
                   src={message.image}
                   alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
+                  className="sm:max-w-50 rounded-md mb-2"
                 />
               )}
               {message.text && <span>{message.text}</span>}
