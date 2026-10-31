@@ -73,54 +73,70 @@ const Profile = () => {
           {/* Right section with user info */}
           <div className="w-full md:w-3/5 p-8 lg:ml-4 lg:w-auto">
             <div className="rounded shadow p-6">
-              <div className="pb-6">
-                <label
-                  htmlFor="name"
-                  className="font-semibold text-gray-600 block pb-1"
-                >
-                  <User className="h-5 w-5 text-gray-400 inline" /> Name
-                </label>
-                <input
-                  disabled
-                  id="name"
-                  className="border rounded px-4 py-2 w-full"
-                  type="text"
-                  value={authUser?.name || "Jane Name"}
-                />
-              </div>
-              <div className="pb-6">
-                <label
-                  htmlFor="name"
-                  className="font-semibold text-gray-600 block pb-1"
-                >
-                  <User className="h-5 w-5 text-gray-400 inline" /> Name
-                </label>
-                <input
-                  disabled
-                  id="username"
-                  className="border rounded px-4 py-2 w-full"
-                  type="text"
-                  value={authUser?.username || "Jane Name"}
-                />
+              <div className="flex flex-col lg:flex-row lg:gap-4">
+                <div className="pb-6">
+                  <label
+                    htmlFor="name"
+                    className="font-semibold text-gray-600 block pb-1"
+                  >
+                    Name
+                  </label>
+                  <input
+                    disabled
+                    id="name"
+                    className="border rounded px-4 py-2 w-full cursor-not-allowed"
+                    type="text"
+                    value={authUser?.name || "Jane Doe"}
+                  />
+                </div>
+                <div className="pb-6">
+                  <label
+                    htmlFor="username"
+                    className="font-semibold text-gray-600 block pb-1"
+                  >
+                    Username
+                  </label>
+                  <input
+                    disabled
+                    id="username"
+                    className="border rounded px-4 py-2 w-full cursor-not-allowed"
+                    type="text"
+                    value={authUser?.username || "janedoe"}
+                  />
+                </div>
               </div>
               <div className="pb-4">
                 <label
-                  htmlFor="about"
+                  htmlFor="email"
                   className="font-semibold text-gray-600 block pb-1"
                 >
-                  <Mail className="h-5 w-5 text-gray-400 inline" /> Email
+                  Email
                 </label>
                 <input
                   disabled
                   id="email"
-                  className="border rounded px-4 py-2 w-full"
+                  className="border rounded px-4 py-2 w-full cursor-not-allowed"
                   type="email"
                   value={authUser?.email || ""}
                 />
-                <span className="text-gray-600 pt-4 block opacity-70">
-                  Personal login information of your account
-                </span>
+
               </div>
+              <div className="pb-4">
+                <label
+                  htmlFor="bio"
+                  className="font-semibold text-gray-600 block pb-1"
+                >
+                  Bio
+                </label>
+                <textarea
+                  id="bio"
+                  className="border rounded px-4 py-2 w-full resize-none"
+                  placeholder="Type something about yourself..."
+                />
+              </div>
+              {/* <span className="text-gray-600 pt-4 block opacity-70">
+                Personal login information of your account
+              </span> */}
             </div>
 
             <div className="flex items-center justify-between py-2 ">
